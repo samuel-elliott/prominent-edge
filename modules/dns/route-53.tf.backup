@@ -1,0 +1,35 @@
+# Creat a subdomain for the Elastsearch test domain.
+resource "aws_route53_record" "sam-elliott-test" {
+  
+  # 
+  zone_id = "Z1MJ76P3612RO9" # Zone ID for my domain.
+
+  # Slopshack.com is my domain and has been left behind
+  # for documentation / example purposes.
+  name    = "sam-elliott-test"
+  type    = "A"
+
+  set_identifier = "service-us-east-1"
+
+  latency_routing_policy {
+    region = "us-east-1"
+  }
+
+  # Terraform docs say this is NOT recommended for most environments.
+  # This is now designated a Dev environment so... throw caution to the wind!
+ 
+  allow_overwrite = true
+
+
+  # Points the subdomain at the recently-created Application Load Balancer
+  # via an alias record so the SSL certificate works.
+  alias {
+#    name			= var.load_balancer_dns_name
+#    zone_id			= var.load_balancer_zone_id
+
+#    name                   = data.terraform_remote_state.network.outputs.load_balancer_dns_name
+#    zone_id                = data.terraform_remote_state.network.outputs.load_balancer_zone_id
+    evaluate_target_health = true
+  }
+}
+
